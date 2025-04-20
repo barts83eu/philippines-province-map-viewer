@@ -223,25 +223,21 @@ body::before {
 
 /* Label Styles */
 .region-label {
+    composes: floating-panel;
     width: min(400px, 90vw);
     right: 5%;
-    padding: clamp(20px, 4vw, 40px);
-    font-size: clamp(14px, 2vw, 16px);
     top: 50%;
-    transform: translateY(-50%) translateZ(100px);  /* Added Z translation */
-    background: rgba(255, 255, 255, 0.4); /* Semi-transparent background */
+    transform: translateY(-50%) translateZ(100px);
+    padding: clamp(20px, 4vw, 40px);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
     border-radius: 12px;
     box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.2),
         0 0 0 1px rgba(52, 152, 219, 0.1);
-    z-index: 10000;  /* Increased z-index */
-    max-height: 80vh;
     transform-style: preserve-3d;
-    pointer-events: none;
-    opacity: 0;
     transition: all 0.3s ease;
-    overflow-y: auto;
-    backdrop-filter: blur(5px);
 }
 
 /* Update slide animation to maintain Z position */
@@ -282,6 +278,49 @@ body::before {
     font-size: 1.1em;  /* Larger description text */
 }
 
+/* Tour Planning Panel */
+.tour-panel {
+    composes: floating-panel;
+    width: min(350px, 90vw);
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%) translateZ(100px);
+    padding: 25px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(52, 152, 219, 0.1);
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+}
+
+.tour-panel h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--dark-blue);
+    margin: 0 0 15px 0;
+    font-size: 1.8em;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--light-blue);
+    padding-bottom: 10px;
+}
+
+.tour-content {
+    font-size: 0.95em;
+    color: #34495e;
+    line-height: 1.5;
+}
+
+#selected-regions {
+    margin-top: 15px;
+    min-height: 100px;
+    border: 1px dashed var(--light-blue);
+    border-radius: 6px;
+    padding: 10px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
     .region-label {
@@ -306,6 +345,20 @@ body::before {
 
     #svg-container {
         height: calc(100vh - var(--mobile-topbar-height));
+    }
+
+    .region-label,
+    .tour-panel {
+        width: 85vw;
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+    
+    .tour-panel {
+        top: auto;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateZ(100px);
     }
 
     .region-label {

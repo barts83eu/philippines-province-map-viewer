@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Interactive map viewer for Philippines regions">
     <title>Philippines Interactive Map</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +42,13 @@
                 aria-label="Interactive map of Philippines">
             </object>
             <div id="region-label" class="region-label" aria-live="polite"></div>
+            <div id="tour-panel" class="tour-panel">
+                <h2>Plan Your Tour</h2>
+                <div class="tour-content">
+                    <p>Select regions to create your tour itinerary</p>
+                    <div id="selected-regions"></div>
+                </div>
+            </div>
         </div>
     </main>
 

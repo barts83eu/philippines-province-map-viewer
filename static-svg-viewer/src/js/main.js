@@ -71,10 +71,15 @@ function setupPathInteractions(path, label) {
 
 function handleMouseOver(event, path, label, regionName) {
     path.style.fill = HOVER_COLOR;
-    // Add depth effect on hover
-    path.style.transform = `translateZ(${10}px)`;
-    path.style.transition = 'transform 0.2s ease';
-    updateLabel(label, regionName, event.pageX, event.pageY);
+    updateLabel(label, regionName);
+
+    // Update tour panel when region is clicked
+    const selectedRegions = document.getElementById('selected-regions');
+    path.addEventListener('click', () => {
+        const regionEntry = document.createElement('div');
+        regionEntry.textContent = regionName.replace(/_/g, ' ');
+        selectedRegions.appendChild(regionEntry);
+    });
 }
 
 function handleMouseOut(path, label) {
@@ -102,10 +107,10 @@ function handleTouchEnd(path, label) {
     label.classList.remove('visible');
 }
 
-function updateLabel(label, text, x, y) {
-    const description = provinceDescriptions[text] || text;
+function updateLabel(label, regionName) {
+    const description = provinceDescriptions[regionName] || 'Region of the Philippines';
     label.innerHTML = `
-        <strong>${text.replace(/_/g, ' ')}</strong>
+        <strong>${regionName.replace(/_/g, ' ')}</strong>
         <div class="description">${description}</div>
     `;
     label.classList.add('visible');
