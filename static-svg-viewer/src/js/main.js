@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Login clicked');
         // Add your login logic here
     });
+
+    setupZoomGestures();
 });
 
 function initializeMap() {
@@ -49,19 +51,22 @@ function setupSVGInteractions(svgObject, label) {
 
 function setupPathInteractions(path, label) {
     const regionName = path.getAttribute('id') || path.getAttribute('class');
+    
+    // Touch events
+    path.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleTouchStart(e, path, label, regionName);
+    }, { passive: false });
 
-    // Add data attribute for original color
-    const originalColor = path.style.fill || '';
-    path.dataset.originalColor = originalColor;
+    path.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        handleTouchEnd(path, label);
+    }, { passive: false });
 
     // Mouse events
     path.addEventListener('mouseover', (e) => handleMouseOver(e, path, label, regionName));
     path.addEventListener('mouseout', () => handleMouseOut(path, label));
     path.addEventListener('click', () => handleClick(regionName));
-
-    // Touch events
-    path.addEventListener('touchstart', (e) => handleTouchStart(e, path, label, regionName));
-    path.addEventListener('touchend', () => handleTouchEnd(label));
 }
 
 function handleMouseOver(event, path, label, regionName) {
@@ -84,13 +89,17 @@ function handleClick(regionName) {
 }
 
 function handleTouchStart(event, path, label, regionName) {
-    event.preventDefault();
+    path.style.fill = HOVER_COLOR;
     const touch = event.touches[0];
-    updateLabel(label, regionName, touch.pageX, touch.pageY);
+    const description = provinceDescriptions[regionName] || 'Region of the Philippines';
+    
+    updateLabel(label, regionName, description);
+    label.classList.add('visible');
 }
 
-function handleTouchEnd(label) {
-    hideLabel(label);
+function handleTouchEnd(path, label) {
+    path.style.fill = path.dataset.originalColor || '';
+    label.classList.remove('visible');
 }
 
 function updateLabel(label, text, x, y) {
@@ -125,4 +134,35 @@ function addProvinceMarker(svgDoc) {
     
     // Add marker to SVG container
     document.querySelector('.svg-wrapper').appendChild(marker);
+}
+
+// Add pinch-zoom support
+function setupZoomGestures() {
+    const container = document.getElementById('svg-container');
+    let initialDistance = 0;
+    let currentScale = 1;
+
+    container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            initialDistance = getTouchDistance(e.touches);
+        }
+    });
+
+    container.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            const currentDistance = getTouchDistance(e.touches);
+            const scale = currentDistance / initialDistance;
+            currentScale = Math.min(Math.max(scale, 0.5), 2);
+            
+            document.querySelector('.svg-wrapper').style.transform = 
+                `scale(${currentScale})`;
+        }
+    });
+}
+
+function getTouchDistance(touches) {
+    return Math.hypot(
+        touches[0].pageX - touches[1].pageX,
+        touches[0].pageY - touches[1].pageY
+    );
 }

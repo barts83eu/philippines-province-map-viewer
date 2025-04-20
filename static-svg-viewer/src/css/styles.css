@@ -8,6 +8,7 @@
     --isometric-angle: 45deg;
     --shadow-color: rgba(0,0,0,0.1);
     --extrude-depth: 20px;
+    --mobile-topbar-height: 60px;
 }
 
 body {
@@ -167,18 +168,24 @@ body::before {
 }
 
 #svg-container {
-    margin-top: var(--topbar-height);
-    padding: 20px;
+    width: 100%;
+    height: calc(100vh - var(--topbar-height));
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1000px;
+    overflow: hidden;
+    touch-action: none; /* Prevent default touch actions */
+    margin-top: var(--topbar-height);
+    padding: 20px;
     position: relative;
     z-index: 1;
+    perspective: 1000px;
 }
 
 /* SVG container with extrusion */
 .svg-wrapper {
+    width: 90%;
+    max-width: 1200px;
     position: relative;
     transform-style: preserve-3d;
     perspective: 1000px;
@@ -188,6 +195,7 @@ body::before {
 #svg-object {
     width: 100%;
     height: auto;
+    touch-action: none;
     max-width: 1200px;
     transform: rotateX(45deg) rotateZ(-45deg);
     transform-style: preserve-3d;
@@ -215,18 +223,18 @@ body::before {
 
 /* Label Styles */
 .region-label {
-    position: fixed;
-    right: 8%;  /* Moved slightly more to the right */
+    width: min(400px, 90vw);
+    right: 5%;
+    padding: clamp(20px, 4vw, 40px);
+    font-size: clamp(14px, 2vw, 16px);
     top: 50%;
     transform: translateY(-50%) translateZ(100px);  /* Added Z translation */
     background: rgba(255, 255, 255, 0.4); /* Semi-transparent background */
-    padding: 40px 45px;  /* Increased padding for larger panel */
     border-radius: 12px;
     box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.2),
         0 0 0 1px rgba(52, 152, 219, 0.1);
     z-index: 10000;  /* Increased z-index */
-    width: 400px;  /* Slightly wider */
     max-height: 80vh;
     transform-style: preserve-3d;
     pointer-events: none;
@@ -283,10 +291,34 @@ body::before {
 }
 
 @media (max-width: 768px) {
+    .topbar {
+        height: var(--mobile-topbar-height);
+        padding: 0.5rem;
+    }
+
+    .topbar h1 {
+        font-size: 1.2rem;
+    }
+
+    .top-nav {
+        gap: 10px;
+    }
+
+    #svg-container {
+        height: calc(100vh - var(--mobile-topbar-height));
+    }
+
     .region-label {
-        right: 20px;
-        width: 280px;
-        padding: 20px 25px;
+        right: 50%;
+        transform: translate(50%, -50%);
+        bottom: 20px;
+        top: auto;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .svg-wrapper {
+        width: 95%;
     }
 }
 
