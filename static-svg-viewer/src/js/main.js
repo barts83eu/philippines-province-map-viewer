@@ -41,6 +41,9 @@ function setupSVGInteractions(svgObject, label) {
     const svgDoc = svgObject.contentDocument;
     const paths = svgDoc.querySelectorAll('path');
 
+    // Add marker for Cebu
+    addProvinceMarker(svgDoc);
+
     paths.forEach(path => setupPathInteractions(path, label));
 }
 
@@ -101,4 +104,25 @@ function updateLabel(label, text, x, y) {
 
 function hideLabel(label) {
     label.classList.remove('visible');
+}
+
+function addProvinceMarker(svgDoc) {
+    const cebuPath = svgDoc.querySelector('#Cebu');
+    if (!cebuPath) return;
+
+    // Get Cebu province position
+    const bbox = cebuPath.getBBox();
+    const markerX = bbox.x + (bbox.width / 2);
+    const markerY = bbox.y + (bbox.height / 2);
+
+    // Create marker element
+    const marker = document.createElement('div');
+    marker.className = 'province-marker';
+    
+    // Position marker
+    marker.style.left = `${markerX}px`;
+    marker.style.top = `${markerY}px`;
+    
+    // Add marker to SVG container
+    document.querySelector('.svg-wrapper').appendChild(marker);
 }

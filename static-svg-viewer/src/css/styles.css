@@ -219,13 +219,13 @@ body::before {
     right: 8%;  /* Moved slightly more to the right */
     top: 50%;
     transform: translateY(-50%) translateZ(100px);  /* Added Z translation */
-    background: white;
+    background: rgba(255, 255, 255, 0.4); /* Semi-transparent background */
     padding: 40px 45px;  /* Increased padding for larger panel */
     border-radius: 12px;
     box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.2),
         0 0 0 1px rgba(52, 152, 219, 0.1);
-    z-index: 2000;  /* Increased z-index */
+    z-index: 10000;  /* Increased z-index */
     width: 400px;  /* Slightly wider */
     max-height: 80vh;
     transform-style: preserve-3d;
@@ -293,4 +293,39 @@ body::before {
 /* Remove visited state color change */
 path:visited {
     color: inherit;
+}
+
+/* Marker Styles */
+.province-marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff4757;
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    animation: markerBounce 1s ease-in-out infinite;
+    box-shadow: 
+        0 4px 8px rgba(255, 71, 87, 0.3),
+        0 0 0 4px rgba(255, 71, 87, 0.2);
+}
+
+.province-marker::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 10px;
+    background: #ff4757;
+    transform-origin: top;
+}
+
+@keyframes markerBounce {
+    0%, 100% {
+        transform: translateY(0) translateZ(20px);
+    }
+    50% {
+        transform: translateY(-15px) translateZ(20px) scale(1.1);
+    }
 }
